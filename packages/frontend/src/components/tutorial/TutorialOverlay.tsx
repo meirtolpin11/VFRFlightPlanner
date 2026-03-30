@@ -1,6 +1,35 @@
 import { Joyride, STATUS } from 'react-joyride'
-import type { EventData, Step } from 'react-joyride'
+import type { BeaconRenderProps, EventData, Step } from 'react-joyride'
 import { useUiStore } from '../../store/uiStore'
+
+function RedBeacon(_props: BeaconRenderProps) {
+  return (
+    <span style={{ width: 28, height: 28, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <span style={{
+        position: 'absolute',
+        inset: 0,
+        borderRadius: '50%',
+        background: 'rgba(239,68,68,0.25)',
+        animation: 'beacon-pulse 1.4s ease-in-out infinite',
+      }} />
+      <span style={{
+        width: 14,
+        height: 14,
+        borderRadius: '50%',
+        background: '#ef4444',
+        boxShadow: '0 0 8px rgba(239,68,68,0.7)',
+        position: 'relative',
+      }} />
+      <style>{`
+        @keyframes beacon-pulse {
+          0%   { transform: scale(0.8); opacity: 0.9; }
+          50%  { transform: scale(1.4); opacity: 0.3; }
+          100% { transform: scale(0.8); opacity: 0.9; }
+        }
+      `}</style>
+    </span>
+  )
+}
 
 const TUTORIAL_DONE_KEY = 'vfr_tutorial_done'
 
@@ -77,13 +106,14 @@ const joyrideOptions = {
   primaryColor: '#3b82f6',
   backgroundColor: '#161b27',
   textColor: '#e2e8f0',
-  overlayColor: 'rgba(13,17,23,0.7)',
+  overlayColor: 'rgba(13,17,23,0.75)',
   arrowColor: '#161b27',
-  beaconSize: 28,
+  zIndex: 10000,
 }
 
 export default function TutorialOverlay() {
   const tutorialActive = useUiStore(s => s.tutorialActive)
+  const tutorialKey = useUiStore(s => s.tutorialKey)
   const stopTutorial = useUiStore(s => s.stopTutorial)
 
   function handleEvent(data: EventData) {
@@ -95,10 +125,12 @@ export default function TutorialOverlay() {
 
   return (
     <Joyride
+      key={tutorialKey}
       steps={STEPS}
       run={tutorialActive}
       continuous
       scrollToFirstStep
+      beaconComponent={RedBeacon}
       onEvent={handleEvent}
       options={joyrideOptions}
       locale={{
