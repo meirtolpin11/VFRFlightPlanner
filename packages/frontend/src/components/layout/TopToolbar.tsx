@@ -24,9 +24,9 @@ function Divider() {
   return <div className="w-px h-5 bg-fp-border-2 flex-shrink-0 mx-1" />
 }
 
-function PillGroup({ children }: { children: React.ReactNode }) {
+function PillGroup({ children, ...rest }: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex items-center rounded-md border border-fp-border-2 overflow-hidden flex-shrink-0 bg-fp-panel">
+    <div className="flex items-center rounded-md border border-fp-border-2 overflow-hidden flex-shrink-0 bg-fp-panel" {...rest}>
       {children}
     </div>
   )
@@ -40,7 +40,7 @@ export default function TopToolbar() {
     setShowReportingPoints, setShowNavaids, setShowWind, setShowGafor,
     flyTo,
   } = useMapStore()
-  const { setCreateTripOpen, setAirplanesOpen } = useUiStore()
+  const { setCreateTripOpen, setAirplanesOpen, startTutorial } = useUiStore()
   const user = useAuthStore(s => s.user)
   const logout = useAuthStore(s => s.logout)
   const [adminOpen, setAdminOpen] = useState(false)
@@ -81,7 +81,7 @@ export default function TopToolbar() {
       </span>
 
       {/* Pill group 1: Map base layers */}
-      <PillGroup>
+      <PillGroup data-tutorial="toolbar-layers-base">
         <LayerBtn active={showBaseLayer} onClick={() => setShowBaseLayer(!showBaseLayer)}>Base</LayerBtn>
         <div className="w-px h-4 bg-fp-border-2" />
         <LayerBtn active={showAeroLayer} onClick={() => setShowAeroLayer(!showAeroLayer)}>Aero</LayerBtn>
@@ -90,7 +90,7 @@ export default function TopToolbar() {
       <Divider />
 
       {/* Pill group 2: Overlay layers */}
-      <PillGroup>
+      <PillGroup data-tutorial="toolbar-layers-overlays">
         <LayerBtn active={showAirspaces} onClick={() => setShowAirspaces(!showAirspaces)}>Airspaces</LayerBtn>
         <div className="w-px h-4 bg-fp-border-2" />
         <LayerBtn active={showAirports} onClick={() => setShowAirports(!showAirports)}>Airports</LayerBtn>
@@ -107,7 +107,7 @@ export default function TopToolbar() {
       <Divider />
 
       {/* Airport / waypoint search */}
-      <div className="relative flex-shrink-0">
+      <div className="relative flex-shrink-0" data-tutorial="toolbar-search">
         <input
           ref={searchInputRef}
           type="text"
@@ -131,6 +131,7 @@ export default function TopToolbar() {
 
       {/* Action buttons */}
       <button
+        data-tutorial="toolbar-new-trip"
         onClick={() => setCreateTripOpen(true)}
         className="px-3 py-1.5 bg-fp-accent text-white rounded text-xs font-semibold hover:bg-blue-400 transition-colors flex-shrink-0 fp-glow"
       >
@@ -163,6 +164,12 @@ export default function TopToolbar() {
           >
             Logout
           </button>
+          <button
+            data-tutorial="toolbar-help"
+            onClick={startTutorial}
+            className="w-6 h-6 flex items-center justify-center rounded-full border border-fp-border-2 text-fp-muted text-xs font-bold hover:border-fp-accent hover:text-fp-accent transition-colors flex-shrink-0"
+            title="Show tutorial"
+          >?</button>
         </>
       )}
 

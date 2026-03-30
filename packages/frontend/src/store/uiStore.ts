@@ -32,6 +32,10 @@ interface ContextMenuPos {
 }
 
 interface UiStore {
+  tutorialActive: boolean
+  startTutorial: () => void
+  stopTutorial: () => void
+
   createTripOpen: boolean
   createFlightOpen: boolean
   createLegOpen: boolean
@@ -58,6 +62,10 @@ interface UiStore {
 }
 
 export const useUiStore = create<UiStore>((set) => ({
+  tutorialActive: false,
+  startTutorial: () => set({ tutorialActive: true }),
+  stopTutorial: () => set({ tutorialActive: false }),
+
   createTripOpen: false,
   createFlightOpen: false,
   createLegOpen: false,

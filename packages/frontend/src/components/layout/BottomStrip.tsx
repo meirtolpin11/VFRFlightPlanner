@@ -24,7 +24,7 @@ export default function BottomStrip() {
 
   if (!legId) {
     return (
-      <div className="h-10 bg-fp-panel border-t border-fp-border flex items-center px-4 text-xs text-fp-muted gap-2">
+      <div data-tutorial="bottom-strip" className="h-10 bg-fp-panel border-t border-fp-border flex items-center px-4 text-xs text-fp-muted gap-2">
         <span className="w-2 h-2 rounded-full bg-fp-muted/30 flex-shrink-0" />
         Select a leg to see stats
       </div>
@@ -39,7 +39,7 @@ export default function BottomStrip() {
   const stats = calculateLegStats(leg, airplane)
 
   return (
-    <div className="h-10 bg-fp-panel border-t border-fp-border-2 flex items-center px-4 gap-3 text-xs overflow-x-auto">
+    <div data-tutorial="bottom-strip" className="h-10 bg-fp-panel border-t border-fp-border-2 flex items-center px-4 gap-3 text-xs overflow-x-auto">
       {/* Leg color indicator */}
       <span
         className="w-2.5 h-2.5 rounded-full flex-shrink-0"

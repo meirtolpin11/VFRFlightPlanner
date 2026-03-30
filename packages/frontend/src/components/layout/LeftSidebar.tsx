@@ -66,7 +66,7 @@ export default function LeftSidebar() {
   }
 
   return (
-    <div className="w-full h-full bg-fp-panel border-r border-fp-border flex flex-col overflow-hidden">
+    <div data-tutorial="sidebar-trips" className="w-full h-full bg-fp-panel border-r border-fp-border flex flex-col overflow-hidden">
       {/* Header */}
       <div className="px-3 py-2 flex items-center border-b border-fp-border bg-fp-bg">
         <span className="text-xs font-semibold text-fp-muted-2 uppercase tracking-widest">Trips</span>
@@ -136,6 +136,7 @@ export default function LeftSidebar() {
                   title="Share trip"
                 >⇄</button>
                 <button
+                  data-tutorial="sidebar-add-flight"
                   onClick={() => { setActiveTripId(trip.id); setActiveFlightId(null); setCreateFlightOpen(true) }}
                   className="text-fp-muted hover:text-fp-accent text-xs flex-shrink-0 transition-colors"
                   title="Add flight"
@@ -198,6 +199,7 @@ export default function LeftSidebar() {
                         title="Change airplane"
                       >✈</button>
                       <button
+                        data-tutorial="sidebar-add-leg"
                         onClick={() => { setActiveFlightId(flight.id); setCreateLegOpen(true) }}
                         className="hover:text-fp-accent flex-shrink-0 transition-colors"
                         title="Add leg"

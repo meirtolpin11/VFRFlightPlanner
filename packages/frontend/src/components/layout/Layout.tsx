@@ -13,6 +13,8 @@ import CreateFlightModal from '../modals/CreateFlightModal'
 import CreateLegModal from '../modals/CreateLegModal'
 import AirplaneProfilesModal from '../modals/AirplaneProfilesModal'
 import ExportModal from '../modals/ExportModal'
+import TutorialOverlay from '../tutorial/TutorialOverlay'
+import { useTutorialAutoStart } from '../../hooks/useTutorialAutoStart'
 
 const MIN_PANEL = 160
 const MAX_PANEL = 520
@@ -108,6 +110,8 @@ export default function Layout() {
   })
   const showProfile = !!(selectedLeg?.departure && selectedLeg?.arrival)
 
+  useTutorialAutoStart()
+
   useEffect(() => {
     fetchTrips()
     fetchAirplanes()
@@ -133,7 +137,7 @@ export default function Layout() {
 
         {/* Center column: map + optional profile */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-          <div className="flex-1 relative overflow-hidden min-h-0">
+          <div data-tutorial="map-area" className="flex-1 relative overflow-hidden min-h-0">
             <MapView />
           </div>
 
@@ -179,6 +183,7 @@ export default function Layout() {
       <CreateLegModal />
       <AirplaneProfilesModal />
       <ExportModal />
+      <TutorialOverlay />
     </div>
   )
 }
