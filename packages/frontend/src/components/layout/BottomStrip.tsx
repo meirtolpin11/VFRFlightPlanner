@@ -18,7 +18,7 @@ function Sep() {
 
 export default function BottomStrip() {
   const { legId, flightId } = useSelectionStore()
-  const getLeg = useTripStore(s => s.getLeg)
+  const leg = useTripStore(s => legId ? s.getLeg(legId) : null)
   const getFlight = useTripStore(s => s.getFlight)
   const airplanes = useAirplaneStore(s => s.airplanes)
 
@@ -31,7 +31,6 @@ export default function BottomStrip() {
     )
   }
 
-  const leg = getLeg(legId)
   const flight = flightId ? getFlight(flightId) : null
   const airplane = flight?.airplaneId ? airplanes.find(a => a.id === flight.airplaneId) : null
 

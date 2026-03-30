@@ -10,10 +10,9 @@ interface Props {
 }
 
 export default function LegDetailPanel({ legId, flightId }: Props) {
-  const getLeg = useTripStore(s => s.getLeg)
+  const leg = useTripStore(s => s.getLeg(legId))
   const updateLeg = useTripStore(s => s.updateLeg)
   const openExport = useUiStore(s => s.openExport)
-  const leg = getLeg(legId)
   const [notes, setNotes] = useState(leg?.notes || '')
   const [saveTimer, setSaveTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
