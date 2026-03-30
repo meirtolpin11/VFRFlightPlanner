@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useMapEvents } from 'react-leaflet'
 import { useUiStore } from '../../store/uiStore'
@@ -62,6 +62,22 @@ function ContextMenuOverlay() {
   const { legId } = useSelectionStore()
   const { getLeg, updateLegWaypoints } = useTripStore()
   const menuRef = useRef<HTMLDivElement>(null)
+  const [elevationFt, setElevationFt] = useState<number | null>(null)
+  const [elevLoading, setElevLoading] = useState(false)
+
+  useEffect(() => {
+    if (!contextMenu) return
+    setElevationFt(null)
+    setElevLoading(true)
+    fetch(`https://api.opentopodata.org/v1/srtm90m?locations=${contextMenu.lat},${contextMenu.lon}`)
+      .then(r => r.json())
+      .then(d => {
+        const meters = d.results?.[0]?.elevation
+        setElevationFt(meters != null ? Math.round(meters * 3.28084) : null)
+      })
+      .catch(() => setElevationFt(null))
+      .finally(() => setElevLoading(false))
+  }, [contextMenu?.lat, contextMenu?.lon])
 
   if (!contextMenu) return null
 
@@ -133,8 +149,17 @@ function ContextMenuOverlay() {
       style={{ position: 'fixed', left: contextMenu.x, top: contextMenu.y, zIndex: 9999 }}
       className="bg-fp-panel border border-fp-border rounded shadow-lg py-1 min-w-52 max-w-72"
     >
-      <div className="px-3 py-1.5 text-xs text-fp-muted border-b border-fp-border font-mono">
-        {contextMenu.lat.toFixed(5)}, {contextMenu.lon.toFixed(5)}
+      <div className="px-3 py-1.5 text-xs text-fp-muted border-b border-fp-border">
+        <div className="font-mono">{contextMenu.lat.toFixed(5)}, {contextMenu.lon.toFixed(5)}</div>
+        <div className="mt-0.5 text-fp-muted-2">
+          Elevation:{' '}
+          {elevLoading
+            ? <span className="opacity-50">…</span>
+            : elevationFt != null
+              ? <span className="text-fp-text font-medium">{elevationFt.toLocaleString()} ft MSL</span>
+              : <span className="opacity-40">unavailable</span>
+          }
+        </div>
       </div>
 
       {contextMenu.waypointCtx && (
