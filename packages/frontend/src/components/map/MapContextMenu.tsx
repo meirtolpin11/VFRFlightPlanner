@@ -69,11 +69,10 @@ function ContextMenuOverlay() {
     if (!contextMenu) return
     setElevationFt(null)
     setElevLoading(true)
-    fetch(`https://api.opentopodata.org/v1/srtm90m?locations=${contextMenu.lat},${contextMenu.lon}`)
+    fetch(`/api/v1/wx/elevation?lat=${contextMenu.lat}&lon=${contextMenu.lon}`)
       .then(r => r.json())
       .then(d => {
-        const meters = d.results?.[0]?.elevation
-        setElevationFt(meters != null ? Math.round(meters * 3.28084) : null)
+        setElevationFt(d.elevationFt ?? null)
       })
       .catch(() => setElevationFt(null))
       .finally(() => setElevLoading(false))
