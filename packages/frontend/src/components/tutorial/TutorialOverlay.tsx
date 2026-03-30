@@ -77,9 +77,21 @@ const STEPS: Step[] = [
     placement: 'right',
   },
   {
+    target: '[data-tutorial="leg-color-dot"]',
+    title: 'Change leg color',
+    content: 'Click the colored dot next to a leg to open the color picker. Choose from the palette or pick any custom color — the route line on the map updates instantly.',
+    placement: 'right',
+  },
+  {
+    target: '[data-tutorial="leg-visibility"]',
+    title: 'Show / hide a leg',
+    content: 'Click the ● button to hide a leg from the map without deleting it. Click ○ to show it again. Hover over the leg row to reveal this button.',
+    placement: 'right',
+  },
+  {
     target: '[data-tutorial="right-panel"]',
     title: 'Leg detail panel',
-    content: 'Select a leg from the sidebar or by clicking its route on the map. Here you can view waypoints, change the leg color, add notes, and export the navlog.',
+    content: 'Select a leg to open this panel. Here you can view all waypoints, add notes, and export the navlog as GPX, PLN, or FPL.',
     placement: 'left',
   },
   {

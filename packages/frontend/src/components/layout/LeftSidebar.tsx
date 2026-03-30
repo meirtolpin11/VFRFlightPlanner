@@ -247,6 +247,7 @@ export default function LeftSidebar() {
 
                             {/* Color dot */}
                             <button
+                              data-tutorial="leg-color-dot"
                               onClick={e => { e.stopPropagation(); setEditingLegColor(editingLegColor === leg.id ? null : leg.id) }}
                               className="w-2.5 h-2.5 rounded-full flex-shrink-0 hover:ring-2 hover:ring-white/40 cursor-pointer transition-all"
                               style={{ background: leg.color }}
@@ -286,6 +287,7 @@ export default function LeftSidebar() {
                             )}
 
                             <button
+                              data-tutorial="leg-visibility"
                               onClick={e => { e.stopPropagation(); toggleLegVisibility(flight.id, leg.id) }}
                               className="text-fp-muted hover:text-fp-text opacity-0 group-hover:opacity-100 flex-shrink-0 transition-colors"
                               title={leg.visible === false ? 'Show on map' : 'Hide from map'}
