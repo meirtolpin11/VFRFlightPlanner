@@ -1,0 +1,52 @@
+image:
+  registry: ""
+  pullPolicy: IfNotPresent
+  backend:
+    repository: flight-planner-backend
+    tag: latest
+  frontend:
+    repository: flight-planner-frontend
+    tag: latest
+
+nameOverride: ""
+fullnameOverride: ""
+
+backend:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  port: 3001
+
+frontend:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  port: 80
+
+postgres:
+  enabled: true
+  storageSize: 20Gi
+  image: postgis/postgis:15-3.4
+  database: flightplanner
+  username: fp_user
+  password: fp_pass
+
+ingress:
+  enabled: true
+  className: nginx
+  host: flightplanner.example.com
+  tls: true
+  clusterIssuer: letsencrypt-prod
+
+# Override in values.prod.yaml or with --set
+openaipApiKey: ""

@@ -1,0 +1,12 @@
+{
+  "name": "flight-planner",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @flight-planner/backend\" \"npm run dev -w @flight-planner/frontend\"",
+    "build": "npm run build -w @flight-planner/shared && npm run build -w @flight-planner/backend && npm run build -w @flight-planner/frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "flight-planner.fullname" . }}-config
+  labels:
+    {{- include "flight-planner.labels" . | nindent 4 }}
+data:
+  NODE_ENV: "production"
+  PORT: {{ .Values.backend.port | quote }}
+  CACHE_TTL_AIRPORTS_HOURS: "24"
+  CACHE_TTL_AIRSPACES_HOURS: "72"

@@ -1,0 +1,14 @@
+# Production overrides — set openaipApiKey via --set or sealed secrets
+backend:
+  replicas: 2
+
+frontend:
+  replicas: 2
+
+postgres:
+  enabled: true
+  storageSize: 50Gi
+
+ingress:
+  host: flightplanner.example.com
+  tls: true
