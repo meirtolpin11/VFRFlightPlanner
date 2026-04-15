@@ -1,4 +1,4 @@
-import type { Leg, LegStats, Airplane } from '@flight-planner/shared'
+import type { Leg, LegStats, Airplane, Flight, Trip } from '@flight-planner/shared'
 
 export function haversineNm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 3440.065 // Earth radius in NM
@@ -57,4 +57,15 @@ export function formatEte(minutes: number): string {
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
   return h > 0 ? `${h}h ${String(m).padStart(2, '0')}m` : `${m}m`
+}
+
+export function calculateFlightEte(flight: Pick<Flight, 'legs'>, airplane?: Airplane | null): number {
+  return flight.legs.reduce((sum, leg) => sum + calculateLegStats(leg, airplane).eteMinutes, 0)
+}
+
+export function calculateTripEte(trip: Pick<Trip, 'flights'>, airplaneMap: Record<string, Airplane>): number {
+  return trip.flights.reduce((sum, flight) => {
+    const airplane = flight.airplaneId ? airplaneMap[flight.airplaneId] : undefined
+    return sum + calculateFlightEte(flight, airplane)
+  }, 0)
 }

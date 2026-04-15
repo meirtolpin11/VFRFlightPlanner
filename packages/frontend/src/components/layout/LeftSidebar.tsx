@@ -5,6 +5,7 @@ import { useSelectionStore } from '../../store/selectionStore'
 import { useAirplaneStore } from '../../store/airplaneStore'
 import { LEG_COLORS } from '../../utils/colorPalette'
 import ShareTripModal from '../modals/ShareTripModal'
+import { calculateFlightEte, calculateTripEte, formatEte } from '../../utils/legCalc'
 
 type EditingNameEntry = {
   id: string
@@ -25,6 +26,7 @@ export default function LeftSidebar() {
   const { setCreateFlightOpen, setCreateLegOpen, setActiveFlightId, setActiveTripId } = useUiStore()
   const { selectLeg, clearSelection, legId: selectedLegId } = useSelectionStore()
   const airplanes = useAirplaneStore(s => s.airplanes)
+  const airplaneMap = Object.fromEntries(airplanes.map(a => [a.id, a]))
 
   const [editingLegColor, setEditingLegColor] = useState<string | null>(null)
   const [editingAirplane, setEditingAirplane] = useState<string | null>(null)
@@ -85,6 +87,8 @@ export default function LeftSidebar() {
           const someVisible = trip.flights.some(f => f.visibleOnMap)
           const isRenamingTrip = editingName?.type === 'trip' && editingName.id === trip.id
 
+          const tripEte = calculateTripEte(trip, airplaneMap)
+
           return (
             <div key={trip.id}>
               {/* Trip row */}
@@ -121,6 +125,13 @@ export default function LeftSidebar() {
                   </span>
                 )}
 
+                {/* Trip total ETE */}
+                {tripEte > 0 && (
+                  <span className="text-xs font-normal text-fp-muted-2 bg-fp-panel-2 px-1.5 py-0.5 rounded border border-fp-border flex-shrink-0" title="Total trip time">
+                    {formatEte(tripEte)}
+                  </span>
+                )}
+
                 {/* Pencil hint on hover */}
                 {!isRenamingTrip && (
                   <span
@@ -151,6 +162,8 @@ export default function LeftSidebar() {
               {/* Flights */}
               {trip.flights.map(flight => {
                 const isRenamingFlight = editingName?.type === 'flight' && editingName.id === flight.id
+                const flightAirplane = flight.airplaneId ? airplaneMap[flight.airplaneId] : undefined
+                const flightEte = calculateFlightEte(flight, flightAirplane)
                 return (
                   <div key={flight.id}>
                     {/* Flight row */}
@@ -182,6 +195,13 @@ export default function LeftSidebar() {
                           title="Double-click to rename"
                         >
                           {flight.name}
+                        </span>
+                      )}
+
+                      {/* Flight total ETE */}
+                      {flightEte > 0 && (
+                        <span className="text-fp-muted flex-shrink-0" title="Total flight time">
+                          {formatEte(flightEte)}
                         </span>
                       )}
 
